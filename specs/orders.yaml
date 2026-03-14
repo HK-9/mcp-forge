@@ -1,0 +1,196 @@
+openapi: 3.1.0
+info:
+  title: Orders API
+  description: Simple orders service for MCP Platform PoC
+  version: 1.0.0
+paths:
+  /orders/{order_id}:
+    get:
+      summary: Get Order By Id
+      description: Get a single order by its ID.
+      operationId: get_order_by_id_orders__order_id__get
+      parameters:
+      - name: order_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Order Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      summary: Delete Order By Id
+      description: Delete an order by its ID.
+      operationId: delete_order_by_id_orders__order_id__delete
+      parameters:
+      - name: order_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Order Id
+      responses:
+        '204':
+          description: Successful Response
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /orders:
+    get:
+      summary: List All Orders
+      description: List all orders, optionally filtered by customer ID.
+      operationId: list_all_orders_orders_get
+      parameters:
+      - name: customer_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Customer Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrderResponse'
+                title: Response List All Orders Orders Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    post:
+      summary: Create New Order
+      description: Create a new order.
+      operationId: create_new_order_orders_post
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOrderRequest'
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    CreateOrderRequest:
+      properties:
+        customer_id:
+          type: string
+          title: Customer Id
+          description: Customer identifier
+          example: C100
+        product_id:
+          type: string
+          title: Product Id
+          description: Product identifier
+          example: P100
+        quantity:
+          type: integer
+          exclusiveMinimum: 0.0
+          title: Quantity
+          description: Number of items to order
+          example: 2
+      type: object
+      required:
+      - customer_id
+      - product_id
+      - quantity
+      title: CreateOrderRequest
+      description: What the client sends when creating an order.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    OrderResponse:
+      properties:
+        id:
+          type: string
+          title: Id
+        customer_id:
+          type: string
+          title: Customer Id
+        product_id:
+          type: string
+          title: Product Id
+        quantity:
+          type: integer
+          title: Quantity
+        status:
+          type: string
+          title: Status
+        created_at:
+          type: string
+          title: Created At
+      type: object
+      required:
+      - id
+      - customer_id
+      - product_id
+      - quantity
+      - status
+      - created_at
+      title: OrderResponse
+      description: What the server returns for an order.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError

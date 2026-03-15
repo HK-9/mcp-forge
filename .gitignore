@@ -1,3 +1,5 @@
 .venv/
 __pycache__/
 *.db
+infra/lambda_bundle
+infra/mcp_lambda_bundle

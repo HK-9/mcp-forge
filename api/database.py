@@ -6,12 +6,17 @@ It just stores and retrieves orders from a SQLite file.
 """
 
 import sqlite3
+import os
 import uuid
 from datetime import datetime, timezone
 from pathlib import Path
 
-# Database file lives next to this module
-DB_PATH = Path(__file__).parent / "orders.db"
+# On Lambda, the filesystem is read-only except /tmp
+# Locally, store next to this module
+if os.environ.get("AWS_LAMBDA_FUNCTION_NAME"):
+    DB_PATH = Path("/tmp/orders.db")
+else:
+    DB_PATH = Path(__file__).parent / "orders.db"
 
 
 def get_connection() -> sqlite3.Connection:

@@ -6,3 +6,4 @@ mcp[cli]
 httpx
 jinja2
 click
+mangum

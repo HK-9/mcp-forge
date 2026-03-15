@@ -43,6 +43,12 @@ app = FastAPI(
 # ──────────────────────────────────────────────
 
 
+@app.get("/")
+def root():
+    """Basic health endpoint for browser checks."""
+    return {"service": "orders-api", "status": "ok"}
+
+
 @app.get("/orders/{order_id}", response_model=OrderResponse)
 def get_order_by_id(order_id: str):
     """Get a single order by its ID."""

@@ -1,0 +1,167 @@
+openapi: 3.1.0
+info:
+  title: Payments API
+  description: Simple payments service for MCP Platform PoC
+  version: 1.0.0
+paths:
+  /payments:
+    post:
+      summary: Create Payment
+      description: Process a new payment.
+      operationId: create_payment_payments_post
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePaymentRequest'
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      summary: List Payments
+      description: List all payments, optionally filtered by order ID.
+      operationId: list_payments_payments_get
+      parameters:
+      - name: order_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Order Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PaymentResponse'
+                title: Response List Payments Payments Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /payments/{payment_id}:
+    get:
+      summary: Get Payment
+      description: Get a payment by ID.
+      operationId: get_payment_payments__payment_id__get
+      parameters:
+      - name: payment_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Payment Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    CreatePaymentRequest:
+      properties:
+        order_id:
+          type: string
+          title: Order Id
+          description: The order this payment is for
+        amount:
+          type: number
+          exclusiveMinimum: 0.0
+          title: Amount
+          description: Payment amount
+        method:
+          type: string
+          title: Method
+          description: Payment method (card, bank, wallet)
+      type: object
+      required:
+      - order_id
+      - amount
+      - method
+      title: CreatePaymentRequest
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    PaymentResponse:
+      properties:
+        id:
+          type: string
+          title: Id
+        order_id:
+          type: string
+          title: Order Id
+        amount:
+          type: number
+          title: Amount
+        method:
+          type: string
+          title: Method
+        status:
+          type: string
+          title: Status
+      type: object
+      required:
+      - id
+      - order_id
+      - amount
+      - method
+      - status
+      title: PaymentResponse
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError

@@ -4,3 +4,4 @@ pydantic
 pyyaml
 mcp[cli]
 httpx
+jinja2

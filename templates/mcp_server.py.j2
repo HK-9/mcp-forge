@@ -1,0 +1,25 @@
+"""
+Auto-generated MCP Server for {{ server_name }}.
+"""
+
+import httpx
+from mcp.server.fastmcp import FastMCP
+
+API_BASE = "{{ api_base }}"
+
+mcp = FastMCP(
+    name="{{ server_name }}",
+    host="127.0.0.1",
+    port={{ port }},
+)
+
+{% for tool in tools %}
+
+@mcp.tool()
+def {{ tool.func_name }}({{ tool.func_params }}) -> str:
+    """{{ tool.description }}"""
+{{ tool.func_body | indent(4, first=True) }}
+{% endfor %}
+
+if __name__ == "__main__":
+    mcp.run()

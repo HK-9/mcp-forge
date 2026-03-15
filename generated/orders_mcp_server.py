@@ -1,5 +1,5 @@
 """
-Auto-generated MCP Server for Orders MCP Server. using Jinja2 template and the OpenAPI spec from specs/orders.yaml.
+Auto-generated MCP Server for Orders MCP Server.
 """
 
 import httpx

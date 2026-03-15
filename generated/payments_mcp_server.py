@@ -10,7 +10,7 @@ API_BASE = "http://localhost:8002"
 mcp = FastMCP(
     name="Payments MCP Server",
     host="127.0.0.1",
-    port=8003,
+    port=8001,
 )
 
 

@@ -1,0 +1,12 @@
+{
+  "orders": {
+    "spec_path": "specs\\orders.yaml",
+    "api_base": "http://localhost:8000",
+    "spec_url": "http://localhost:8000/openapi.json"
+  },
+  "payments": {
+    "spec_path": "specs\\payments.yaml",
+    "api_base": "http://localhost:8002",
+    "spec_url": "http://localhost:8002/openapi.json"
+  }
+}

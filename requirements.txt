@@ -2,3 +2,5 @@ fastapi
 uvicorn
 pydantic
 pyyaml
+mcp[cli]
+httpx
